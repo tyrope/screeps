@@ -1,5 +1,7 @@
 var logVerbose = false;
 
+var Config = require('config');
+
 var MakeSpawnList = function() {
     if(logVerbose){
         console.log('SpawnController::MakeSpawnList::start');
@@ -36,22 +38,35 @@ var MakeSpawnList = function() {
     return SpawnList;
 }
 
-var Spawn = function(role){
-        console.log('SpawnController::MakeSpawnList::start');
+var DoCreepSpawn = function(role){
     if(logVerbose){
+        console.log('SpawnController::DoCreepSpawn::start');
     }
-    if(Game.spawns[Config.SpawnName].spawnCreep(
+
+    let spawnCode = Game.spawns[Config.SpawnName].spawnCreep(
         [WORK, CARRY, MOVE], //TODO Grab from role definition
         'dryRun' + Game.time,
-        { dryRun:true }
-    ) === 0){
+        {dryRun:true});
+
+    if( spawnCode === 0){
+        if(logVerbose){
+            console.log('SpawnController::DoCreepSpawn::Spawning.');
+        }
         Game.spawns[Config.SpawnName].spawnCreep(
             [WORK, CARRY, MOVE], //TODO Grab from role definition
-            r + Game.time,
+            role + Game.time,
             {
-                memory: {role: r }
+                // TODO: Grab memory from role definition
+                memory: {role: role }
             }
         );
+    }else{
+        if(logVerbose){
+            console.log('SpawnController::DoCreepSpawn::Cannot spawn: ' + spawnCode);
+        }
+    }
+    if(logVerbose){
+        console.log('SpawnController::DoCreepSpawn::end');
     }
 }
 
@@ -74,7 +89,7 @@ module.exports = {
         for(let r in SpawnList){
             if(SpawnList[r] > 0){
                 console.log('SpawnController::Spawning a '+r);
-                Spawn(r);
+                DoCreepSpawn(r.valueOf());
                 break; // Once we're spawning, we can't spawn again this tick.
             }
         }
