@@ -1,14 +1,17 @@
-var Config = require('config');
+var logVerbose = true;
+
 module.exports = {
     tick() {
-        if(Config.Verbose){
+        if(logVerbose){
             console.log('RoleController::start');
         }
+
         for(let i in Game.creeps){
             let c = Game.creeps[i]
             c.say(c.memory.role);
         }
-        if(Config.Verbose){
+
+        if(logVerbose){
             console.log('RoleController::end');
         }
     }

@@ -1,7 +1,7 @@
-var Config = require('config');
+var logVerbose = false;
 
 var MakeSpawnList = function() {
-    if(Config.Verbose){
+    if(logVerbose){
         console.log('SpawnController::MakeSpawnList::start');
     }
     let SpawnList = Config.DesiredCreeps.valueOf();
@@ -9,25 +9,25 @@ var MakeSpawnList = function() {
     for(let c in Game.creeps){
         // Save this creep's role.
         let r = Game.creeps[c].memory.role;
-        if(Config.Verbose){
+        if(logVerbose){
             console.log('SpawnController::MakeSpawnList::Found a ' + r);
         }
         // Do we want one of this role?
         if(r in SpawnList && SpawnList[r] > 0) {
             // Yes, tally.
             SpawnList[r]--;
-            if(Config.Verbose){
+            if(logVerbose){
                 console.log('SpawnController::MakeSpawnList::Tallied');
             }
         } else {
             //Nope, mark for recycling.
             Game.creeps[c].memory.role = 'Scar';
-            if(Config.Verbose){
+            if(logVerbose){
                 console.log('SpawnController::MakeSpawnList::Marked for Recycling');
             }
         }
     }
-    if(Config.Verbose){
+    if(logVerbose){
         for(let r in SpawnList){
             console.log('SpawnController::MakeSpawnList::'+r+'='+SpawnList[r]);
         }
@@ -37,8 +37,8 @@ var MakeSpawnList = function() {
 }
 
 var Spawn = function(role){
-    if(Config.Verbose){
         console.log('SpawnController::MakeSpawnList::start');
+    if(logVerbose){
     }
     if(Game.spawns[Config.SpawnName].spawnCreep(
         [WORK, CARRY, MOVE], //TODO Grab from role definition
@@ -57,12 +57,12 @@ var Spawn = function(role){
 
 module.exports = {
     DoSpawns() {
-        if(Config.Verbose){
+        if(logVerbose){
             console.log('SpawnController::start');
         }
         // If we're spawning. Don't do anything.
         if(Game.spawns[Config.SpawnName].spawning){
-            if(Config.Verbose){
+            if(logVerbose){
                 console.log('SpawnController::Spawning In Progress');
                 console.log('SpawnController::end');
             }
@@ -78,7 +78,7 @@ module.exports = {
                 break; // Once we're spawning, we can't spawn again this tick.
             }
         }
-        if(Config.Verbose){
+        if(logVerbose){
             console.log('SpawnController::end');
         }
     }

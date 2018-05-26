@@ -1,9 +1,10 @@
-var Config = require('config');
+var logVerbose = true;
+
 var SpawnController = require('spawnController');
 var RoleController = require('roleController');
 
 module.exports.loop = function() {
-    if(Config.Verbose){
+    if(logVerbose){
         console.log('main::start');
     }
     // Do we need to spawn a new creep?
@@ -13,7 +14,7 @@ module.exports.loop = function() {
 
     // Tick active creeps.
     RoleController.tick();
-    if(Config.Verbose){
+    if(logVerbose){
         console.log('main::end');
     }
 }
