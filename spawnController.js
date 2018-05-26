@@ -26,13 +26,19 @@ var MakeSpawnList = function() {
 }
 
 var Spawn = function(r){
-    Game.spawns[Config.SpawnName].spawnCreep(
-        [WORK, CARRY, MOVE],
-        r + Game.time,
-        {
-            memory: {role: r }
-        }
-    );
+    if(Game.spawns[Config.SpawnName].spawnCreep(
+        [WORK, CARRY, MOVE], //TODO Grab from role definition
+        r+Game.time,
+        { dryRun:true }
+    ) === 0){
+        Game.spawns[Config.SpawnName].spawnCreep(
+            [WORK, CARRY, MOVE], //TODO Grab from role definition
+            r + Game.time,
+            {
+                memory: {role: r }
+            }
+        );
+    }
 }
 
 module.exports = {
