@@ -1,4 +1,4 @@
-var logVerbose = true;
+var logVerbose = false;
 
 module.exports = {
     Body: [WORK, CARRY, MOVE],

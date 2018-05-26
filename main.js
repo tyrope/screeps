@@ -1,4 +1,4 @@
-var logVerbose = true;
+var logVerbose = false;
 
 var SpawnController = require('spawnController');
 var RoleController = require('roleController');
