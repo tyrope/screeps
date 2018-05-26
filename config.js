@@ -1,5 +1,5 @@
 module.exports = {
-    Verbose: false,
+    Verbose: true,
     DesiredCreeps: { 'Welp': 3 },
     Roles: ['Scar', 'Welp'],
     SpawnName: 'LionsDen'
