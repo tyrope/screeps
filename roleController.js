@@ -2,7 +2,8 @@ var logVerbose = false;
 
 var Roles = {
     'Cub': require('role.cub'),
-    'Simba': require('role.simba')
+    'Simba': require('role.simba'),
+    'Sarafina': require('role.sarafina')
 }
 
 module.exports = {

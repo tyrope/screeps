@@ -1,5 +1,3 @@
-var logVerbose = false;
-
 var Config = require('config');
 
 module.exports = {
@@ -20,7 +18,7 @@ module.exports = {
                 // Not close enough, go there.
                 creep.moveTo(sources[0], {
                     visualizePathStyle: {
-                        stroke: '#ff00ff'}
+                        stroke: '#ffff00'}
                 });
             }
         }else{
@@ -34,12 +32,11 @@ module.exports = {
                 if(creep.transfer(targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(targets[0], {
                         visualizePathStyle: {
-                            stroke: '#ffff00'
+                            stroke: '#00ff00'
                         }
                     });
                 }
             }else{
-                // TODO: Idling
                 creep.say('Idling...');
                 creep.moveTo(
                     Config.IdleArea.x, Config.IdleArea.y, {

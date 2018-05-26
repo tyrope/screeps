@@ -4,7 +4,7 @@ module.exports = {
     Mem: {
         memory: {
             requireFilling: true,
-            role: 'Simba'
+            role: 'Sarafina'
         }
     },
 
@@ -32,12 +32,24 @@ module.exports = {
                 creep.memory.requireFilling = true;
                 return;
             }
-            // So we've got stuffs and we're not refilling. Deposit!
-            if(creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE){
-                // We're not there yet...
-                creep.moveTo(creep.room.controller, {
-                    visualizePathStyle: {stroke:'#00ff00'}
-                });
+            // So we've got stuffs and we're not refilling. Time to build!
+            let sites = creep.room.find(FIND_CONSTRUCTION_SITES);
+            if(sites.length){
+                // We've got a thing to build!
+                if(creep.build(sites[0]) == ERR_NOT_IN_RANGE){
+                    creep.moveTo(sites[0], {
+                        visualizePathStyle: {stroke: '#00ff00'}
+                    });
+                }
+            }else{
+                creep.say('Idling...');
+                creep.moveTo(
+                    Config.IdleArea.x, Config.IdleArea.y, {
+                        visualizePathStyle: {
+                            stroke: '#ff0000'
+                        }
+                    }
+                );
             }
         }
     }
