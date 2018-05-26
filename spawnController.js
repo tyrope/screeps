@@ -1,44 +1,36 @@
 var logVerbose = false;
 
 var Config = require('config');
+var RoleController = require('roleController');
 
-var MakeSpawnList = function() {
+var CheckSpawnList = function() {
     if(logVerbose){
         console.log('SpawnController::MakeSpawnList::start');
     }
-    let SpawnList = Config.DesiredCreeps.valueOf();
-    // Go through all current creeps.
-    for(let c in Game.creeps){
-        // Save this creep's role.
-        let r = Game.creeps[c].memory.role;
-        if(logVerbose){
-            console.log('SpawnController::MakeSpawnList::Found a ' + r);
-        }
-        // Do we want one of this role?
-        if(r in SpawnList && SpawnList[r] > 0) {
-            // Yes, tally.
-            SpawnList[r]--;
-            if(logVerbose){
-                console.log('SpawnController::MakeSpawnList::Tallied');
-            }
-        } else {
-            //Nope, mark for recycling.
-            Game.creeps[c].memory.role = 'Scar';
-            if(logVerbose){
-                console.log('SpawnController::MakeSpawnList::Marked for Recycling');
-            }
+
+    let Desireds = Config.DesiredCreeps.valueOf();
+
+    for(let r in RoleController.roles){
+        let count = _.filter(
+            Game.creeps,
+            (creep) => creep.memory.role == r
+        );
+        if(count < Desireds[r]){
+            DoCreepSpawn(r);
+            break; //Once we're spawning, we can stop seeing if we need a spawn.
+        } else if (count > Desireds[r]){
+            //TODO Destroy over-population.
         }
     }
+
     if(logVerbose){
-        for(let r in SpawnList){
-            console.log('SpawnController::MakeSpawnList::'+r+'='+SpawnList[r]);
-        }
         console.log('SpawnController::MakeSpawnList::end');
     }
     return SpawnList;
 }
 
 var DoCreepSpawn = function(role){
+    console.log('SpawnController::Spawning a '+r);
     if(logVerbose){
         console.log('SpawnController::DoCreepSpawn::start');
     }
@@ -84,15 +76,8 @@ module.exports = {
             return;
         }
 
-        let SpawnList = MakeSpawnList();
+        CheckSpawnList();
 
-        for(let r in SpawnList){
-            if(SpawnList[r] > 0){
-                console.log('SpawnController::Spawning a '+r);
-                DoCreepSpawn(r.valueOf());
-                break; // Once we're spawning, we can't spawn again this tick.
-            }
-        }
         if(logVerbose){
             console.log('SpawnController::end');
         }
