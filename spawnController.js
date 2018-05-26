@@ -5,7 +5,7 @@ var RoleController = require('roleController');
 
 var CheckSpawnList = function() {
     if(logVerbose){
-        console.log('SpawnController::MakeSpawnList::start');
+        console.log('SpawnController::CheckSpawnList::start');
     }
 
     let Desireds = Config.DesiredCreeps.valueOf();
@@ -14,7 +14,14 @@ var CheckSpawnList = function() {
         let count = _.filter(
             Game.creeps,
             (creep) => creep.memory.role == r
-        );
+        ).length;
+
+        if(logVerbose){
+            console.log(
+                'SpawnController::CheckSpawnList::'+r+
+                '('+count+'/'+Desireds[r]+')'
+            );
+        }
 
         if(count < Desireds[r]){
             DoCreepSpawn(r);
@@ -25,19 +32,17 @@ var CheckSpawnList = function() {
     }
 
     if(logVerbose){
-        console.log('SpawnController::MakeSpawnList::end');
+        console.log('SpawnController::CheckSpawnList::end');
     }
-    return SpawnList;
 }
 
 var DoCreepSpawn = function(role){
-    console.log('SpawnController::Spawning a '+r);
     if(logVerbose){
-        console.log('SpawnController::DoCreepSpawn::start');
+        console.log('SpawnController::DoCreepSpawn::Spawning a '+role);
     }
 
     let spawnCode = Game.spawns[Config.SpawnName].spawnCreep(
-        [WORK, CARRY, MOVE], //TODO Grab from role definition
+        RoleController.Roles[role].Body,
         'dryRun' + Game.time,
         {dryRun:true});
 
@@ -46,17 +51,12 @@ var DoCreepSpawn = function(role){
             console.log('SpawnController::DoCreepSpawn::Spawning.');
         }
         Game.spawns[Config.SpawnName].spawnCreep(
-            [WORK, CARRY, MOVE], //TODO Grab from role definition
+            RoleController.Roles[role].Body,
             role + Game.time,
-            {
-                // TODO: Grab memory from role definition
-                memory: {role: role }
-            }
+            RoleController.Roles[role].Mem
         );
-    }else{
-        if(logVerbose){
-            console.log('SpawnController::DoCreepSpawn::Cannot spawn: ' + spawnCode);
-        }
+    }else if(logVerbose){
+        console.log('SpawnController::DoCreepSpawn::Cannot spawn: ' + spawnCode);
     }
     if(logVerbose){
         console.log('SpawnController::DoCreepSpawn::end');

@@ -1,5 +1,9 @@
 module.exports = {
-    DesiredCreeps: { 'Welp': 3 },
-    SpawnName: 'LionsDen'
+    DesiredCreeps: { 'Cub':2, 'Simba':1 },
+    SpawnName: 'LionsDen',
+    IdleArea: {
+        x:20,
+        y:20
+    }
 }
 
