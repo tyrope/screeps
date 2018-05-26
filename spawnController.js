@@ -10,11 +10,12 @@ var CheckSpawnList = function() {
 
     let Desireds = Config.DesiredCreeps.valueOf();
 
-    for(let r in RoleController.roles){
+    for(let r in RoleController.Roles){
         let count = _.filter(
             Game.creeps,
             (creep) => creep.memory.role == r
         );
+
         if(count < Desireds[r]){
             DoCreepSpawn(r);
             break; //Once we're spawning, we can stop seeing if we need a spawn.
@@ -63,7 +64,7 @@ var DoCreepSpawn = function(role){
 }
 
 module.exports = {
-    DoSpawns() {
+    DoSpawns: function() {
         if(logVerbose){
             console.log('SpawnController::start');
         }
