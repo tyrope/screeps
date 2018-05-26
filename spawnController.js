@@ -14,20 +14,30 @@ var CheckSpawnList = function() {
         let count = _.filter(
             Game.creeps,
             (creep) => creep.memory.role == r
-        ).length;
+        );
 
         if(logVerbose){
             console.log(
                 'SpawnController::CheckSpawnList::'+r+
-                '('+count+'/'+Desireds[r]+')'
+                '('+count.length+'/'+Desireds[r]+')'
             );
         }
 
-        if(count < Desireds[r]){
+        if(count.length < Desireds[r]){
             DoCreepSpawn(r);
             break; //Once we're spawning, we can stop seeing if we need a spawn.
-        } else if (count > Desireds[r]){
-            //TODO Destroy over-population.
+        } else if (count.length > Desireds[r] && r != 'Scar'){
+            // We're over-populated!
+            if(logVerbose){
+                console.log(
+                'SpawnController::CheckSpawnList::Too many '+r+'s.'+
+                ' Desired amount: '+Desireds[r]+
+                ' Actual amount: '+count.length);
+            }
+            for(i = count.length-1; i >= Desireds[r]; i--){
+                console.log('SpawnController::CheckSpawnList::Removing ID '+i);
+                count[i].memory.role = 'Scar';
+            }
         }
     }
 
