@@ -34,7 +34,7 @@ module.exports.loop = function() {
     // TODO: Check for intruders.
 
     // Tick active creeps.
-    // RoleController.Tick();
+    RoleController.Tick();
 
     if(logVerbose){
         console.log('main::end');
