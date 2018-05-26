@@ -18,7 +18,7 @@ module.exports = {
                 // Not close enough, go there.
                 creep.moveTo(sources[0], {
                     visualizePathStyle: {
-                        stroke: '#ffff00'}
+                        stroke: '#00ff00'}
                 });
             }
         }else{
@@ -37,6 +37,7 @@ module.exports = {
                     });
                 }
             }else{
+                // What about storages?
                 creep.say('Idling...');
                 creep.moveTo(
                     Config.IdleArea.x, Config.IdleArea.y, {

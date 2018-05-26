@@ -17,6 +17,7 @@ module.exports = {
                 creep.memory.requireFilling = false;
                 return;
             }
+            // TODO: Are there storages or containers we can take from?
             // Nope, go mine.
             let sources = creep.room.find(FIND_SOURCES);
                 if(creep.harvest(sources[0]) == ERR_NOT_IN_RANGE){
