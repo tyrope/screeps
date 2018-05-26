@@ -15,17 +15,17 @@ module.exports = {
         // We full?
         if(creep.carry.energy < creep.carryCapacity){
             //Nope, go fetch.
-            var sources = creep.room.find(FIND_SOURCES);
+            let sources = creep.room.find(FIND_SOURCES);
             if(creep.harvest(sources[0]) == ERR_NOT_IN_RANGE){
                 // Not close enough, go there.
                 creep.moveTo(sources[0], {
                     visualizePathStyle: {
-                        stroke: '#ffa500'}
+                        stroke: '#ff00ff'}
                 });
             }
         }else{
             // Find a place that needs energy.
-            var targets = creep.room.find(FIND_STRUCTURES, {
+            let targets = creep.room.find(FIND_STRUCTURES, {
                 filter: (structure) => {
                     return structure.energy < structure.energyCapacity
                 }
@@ -34,7 +34,7 @@ module.exports = {
                 if(creep.transfer(targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(targets[0], {
                         visualizePathStyle: {
-                            stroke: '#ffa500'
+                            stroke: '#ffff00'
                         }
                     });
                 }
@@ -44,7 +44,7 @@ module.exports = {
                 creep.moveTo(
                     Config.IdleArea.x, Config.IdleArea.y, {
                         visualizePathStyle: {
-                            stroke: '#ffffff'
+                            stroke: '#ff0000'
                         }
                     }
                 );
