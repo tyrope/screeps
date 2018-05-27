@@ -9,10 +9,6 @@ var IdlePosition = {x: 20, y:20};
 module.exports = {
     DesiredCreeps: DesiredCreeps,
     SpawnName: SpawnName,
-    IdleArea: {
-        roomName: Game.spawns[SpawnName].room.name,
-        x:IdlePosition.x,
-        y:IdlePosition.y
-    }
+    IdleArea: new RoomPosition(IdlePosition.x, IdlePosition.y, Game.spawns[SpawnName].room.name)
 }
 
