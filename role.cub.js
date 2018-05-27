@@ -1,25 +1,44 @@
 var Config = require('config');
+var Pathfinding = require('pathfinding');
 
 module.exports = {
     Body: [WORK, CARRY, MOVE],
 
     Mem: {
         memory: {
+            activePath: {},
             role: 'Cub'
         }
     },
 
     Tick: function(creep){
+        // We moving?
+        if(creep.memory.activePath.length){
+            //Yup, so move.
+            let loc = creep.memory.activePath[0];
+            let mv = creep.move(creep.pos.getDirectionTo(loc.x,loc.y));
+            if(mv == OK){
+                // This move was completed, delete it.
+                creep.memory.activePath = _.drop(creep.memory.activePath);
+            }else if(mv != ERR_TIRED){
+                console.log(creep.name+'::Trying to move to but can\'t. error code: '+mv);
+            }
+            return;
+        }
+
         // We full?
         if(creep.carry.energy < creep.carryCapacity){
             //Nope, go fetch.
             let sources = creep.room.find(FIND_SOURCES);
             if(creep.harvest(sources[0]) == ERR_NOT_IN_RANGE){
                 // Not close enough, go there.
-                creep.moveTo(sources[0], {
-                    visualizePathStyle: {
-                        stroke: '#00ff00'}
-                });
+                creep.memory.activePath = Pathfinding.findPath(
+                    creep.pos,
+                    {
+                        pos: sources[0].pos,
+                        range: 1
+                    }
+                );
             }
         }else{
             // Find a place that needs energy.
@@ -30,20 +49,22 @@ module.exports = {
             });
             if(targets.length){
                 if(creep.transfer(targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(targets[0], {
-                        visualizePathStyle: {
-                            stroke: '#00ff00'
+                    creep.memory.activePath = Pathfinding.findPath(
+                        creep.pos,
+                        {
+                            pos: targets[0].pos,
+                            range: 1
                         }
-                    });
+                    );
                 }
             }else{
                 // What about storages?
                 creep.say('Idling...');
-                creep.moveTo(
-                    Config.IdleArea.x, Config.IdleArea.y, {
-                        visualizePathStyle: {
-                            stroke: '#ff0000'
-                        }
+                creep.memory.activePath = Pathfinding.findPath(
+                    creep.pos,
+                    {
+                        pos: Config.IdleArea,
+                        range: 1
                     }
                 );
             }
