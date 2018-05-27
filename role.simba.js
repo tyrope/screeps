@@ -1,16 +1,5 @@
 var Pathfinding = require('pathfinding');
-
-var move = function(creep){
-    let loc = creep.memory.activePath[0];
-    let mv = creep.move(creep.pos.getDirectionTo(loc.x,loc.y));
-    if(mv == OK){
-        // This move was completed, delete it from our path.
-        creep.memory.activePath = _.drop(creep.memory.activePath);
-    }else if(mv != ERR_TIRED){
-        // We couldn't move, and it wasn't because we were tired.
-        console.log(creep.name+'::Trying to move to but can\'t. error code: '+mv);
-    }
-}
+var TM = require('taskMaster');
 
 module.exports = {
     Body: [WORK, CARRY, MOVE],
@@ -26,7 +15,7 @@ module.exports = {
     Tick: function(creep){
         // We moving?
         if(creep.memory.activePath.length){
-            move(creep);
+            TM.Move(creep);
             return;
         }
 
@@ -38,19 +27,7 @@ module.exports = {
                 creep.memory.requireFilling = false;
                 return;
             }
-            // TODO: Are there storages or containers we can take from?
-            // Nope, go mine.
-            let sources = creep.room.find(FIND_SOURCES);
-                if(creep.harvest(sources[0]) == ERR_NOT_IN_RANGE){
-                // Not close enough, go to the source.
-                creep.memory.activePath = Pathfinding.findPath(
-                    creep.pos,
-                    {
-                        pos: sources[0].pos,
-                        range: 1
-                    }
-                );
-            }
+            TM.Refill(creep);
         }else{
             if(creep.carry.energy == 0){
                 // Actually... we're empty.
