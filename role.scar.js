@@ -22,13 +22,7 @@ module.exports = {
         // Try to be recycled.
         if(Game.spawns[Config.SpawnName].recycleCreep(creep) == ERR_NOT_IN_RANGE){
             // Didn't work, get closer.
-            creep.memory.activePath = Pathfinding.findPath(
-                creep.pos,
-                {
-                    pos: Game.spawns[Config.SpawnName].pos,
-                    range: 1
-                }
-            );
+            TM.SetPath(creep, Game.spawns[Config.SpawnName].pos, 1);
         }
     }
 }

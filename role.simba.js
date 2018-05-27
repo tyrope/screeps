@@ -37,13 +37,7 @@ module.exports = {
             // So we've got stuffs and we're not refilling. Deposit!
             if(creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE){
                 // We're not there yet...
-                creep.memory.activePath = Pathfinding.findPath(
-                    creep.pos,
-                    {
-                        pos: creep.room.controller.pos,
-                        range: 3
-                    }
-                );
+                TM.SetPath(creep, creep.room.controller.pos, 3);
             }
         }
     }

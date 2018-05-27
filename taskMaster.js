@@ -5,13 +5,7 @@ var Build = function(creep){
     if(sites.length){
         // We've got a thing to build!
         if(creep.build(sites[0]) == ERR_NOT_IN_RANGE){
-            creep.memory.activePath = Pathfinding.findPath(
-                creep.pos,
-                {
-                    pos: sites[0].pos,
-                    range: 3
-                }
-            );
+            SetPath(creep, sites[0].pos, 3);
         }
         return true;
     }
@@ -21,13 +15,7 @@ var Build = function(creep){
 var Mine = function(creep){
     let sources = creep.room.find(FIND_SOURCES);
     if(creep.harvest(sources[0]) == ERR_NOT_IN_RANGE){
-        creep.memory.activePath = Pathfinding.findPath(
-            creep.pos,
-            {
-                pos: sources[0].pos,
-                range: 1
-            }
-        );
+        SetPath(creep, sources[0].pos,1);
     }
 }
 
@@ -60,17 +48,21 @@ var Repair = function(creep){
 
     if(repairs.length){
         if(creep.repair(repairs[0]) == ERR_NOT_IN_RANGE){
-            creep.memory.activePath = Pathfinding.findPath(
-                creep.pos,
-                {
-                    pos: repairs[0].pos,
-                    range: 3
-                }
-            );
+            SetPath(creep, repairs[0].pos, 3);
         }
         return true;
     }
     return false;
+}
+
+var SetPath = function(creep, dest, range){
+    creep.memory.activePath = Pathfinding.findPath(
+        creep.pos,
+        {
+            pos: dest,
+            range: range
+        }
+    );
 }
 
 var Supply = function(creep){
@@ -82,13 +74,7 @@ var Supply = function(creep){
 
     if(storages.length){
         if(creep.transfer(storages[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE){
-            creep.memory.activePath = Pathfinding.findPath(
-                creep.pos,
-                {
-                    pos: storages[0].pos,
-                    range: 1
-                }
-            );
+            SetPath(creep, storages[0].pos, 1);
         }
         return true;
     }
@@ -101,6 +87,7 @@ module.exports = {
     Move: Move,
     Refill: Refill,
     Repair: Repair,
+    SetPath: SetPath,
     Supply: Supply
 }
 

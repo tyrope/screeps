@@ -26,13 +26,7 @@ module.exports = {
             TM.Mine(creep);
         }else if(!TM.Supply(creep)){
             creep.say('Idling...');
-            creep.memory.activePath = Pathfinding.findPath(
-                creep.pos,
-                {
-                    pos: Config.IdleArea,
-                    range: 1
-                }
-            );
+            TM.SetPath(creep, Config.IdleArea, 1);
         }
     }
 }
