@@ -3,6 +3,20 @@ var logVerbose = false;
 var Config = require('config');
 var Pathfinding = require('pathfinding');
 
+var move = function(creep){
+    if(logVerbose){
+        console.log('role.cub::Tick::Continuing move.');
+    }
+    let loc = creep.memory.activePath[0];
+    let mv = creep.move(creep.pos.getDirectionTo(loc.x,loc.y));
+    if(mv == OK){
+        // This move was completed, delete it.
+        creep.memory.activePath = _.drop(creep.memory.activePath);
+    }else if(mv != ERR_TIRED){
+        console.log(creep.name+'::Trying to move to but can\'t. error code: '+mv);
+    }
+}
+
 module.exports = {
     Body: [WORK, CARRY, MOVE],
 
@@ -16,18 +30,7 @@ module.exports = {
     Tick: function(creep){
         // We moving?
         if(creep.memory.activePath.length){
-            if(logVerbose){
-                console.log('role.cub::Tick::Continuing move.');
-            }
-            //Yup, so move.
-            let loc = creep.memory.activePath[0];
-            let mv = creep.move(creep.pos.getDirectionTo(loc.x,loc.y));
-            if(mv == OK){
-                // This move was completed, delete it.
-                creep.memory.activePath = _.drop(creep.memory.activePath);
-            }else if(mv != ERR_TIRED){
-                console.log(creep.name+'::Trying to move to but can\'t. error code: '+mv);
-            }
+            move(creep);
             return;
         }
 
@@ -75,7 +78,7 @@ module.exports = {
                     );
                 }
             }else{
-                // What about storages?
+                // TODO: What about storages?
                 creep.say('Idling...');
                 creep.memory.activePath = Pathfinding.findPath(
                     creep.pos,
