@@ -28,14 +28,15 @@ var CheckSpawnList = function() {
             break; //Once we're spawning, we can stop seeing if we need a spawn.
         } else if (count.length > Desireds[r] && r != 'Scar'){
             // We're over-populated!
-            if(logVerbose){
-                console.log(
+            console.log(
                 'SpawnController::CheckSpawnList::Too many '+r+'s.'+
                 ' Desired amount: '+Desireds[r]+
-                ' Actual amount: '+count.length);
-            }
+                ' Actual amount: '+count.length
+            );
             for(i = count.length-1; i >= Desireds[r]; i--){
-                console.log('SpawnController::CheckSpawnList::Removing ID '+i);
+                if(logVerbose){
+                    console.log('SpawnController::CheckSpawnList::Removing ID '+i);
+                }
                 count[i].memory.role = 'Scar';
             }
         }
@@ -48,7 +49,7 @@ var CheckSpawnList = function() {
 
 var DoCreepSpawn = function(role){
     if(logVerbose){
-        console.log('SpawnController::DoCreepSpawn::Spawning a '+role);
+        console.log('SpawnController::DoCreepSpawn::Trying to spawn a '+role);
     }
 
     let spawnCode = Game.spawns[Config.SpawnName].spawnCreep(
@@ -57,9 +58,7 @@ var DoCreepSpawn = function(role){
         {dryRun:true});
 
     if( spawnCode === 0){
-        if(logVerbose){
-            console.log('SpawnController::DoCreepSpawn::Spawning.');
-        }
+        console.log('SpawnController::DoCreepSpawn::Spawning a '+role+'.');
         Game.spawns[Config.SpawnName].spawnCreep(
             RoleController.Roles[role].Body,
             role + Game.time,

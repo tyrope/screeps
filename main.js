@@ -10,9 +10,7 @@ var garbageCollect = function(){
     for(let mem in Memory.creeps){
         if(!Game.creeps[mem]){
             delete Memory.creeps[mem];
-            if(logVerbose){
-                console.log('main::garbageCollect::deleted ' + mem);
-            }
+            console.log('main::garbageCollect::deleted ' + mem);
         }
     }
     if(logVerbose){
