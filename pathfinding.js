@@ -88,7 +88,7 @@ module.exports = {
                 plainCost:2,
                 swampCost:10,
                 roomCallback: GetCostMatrix,
-                range: 1
+                range: to.range
             }
         );
 
