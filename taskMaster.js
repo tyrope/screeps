@@ -8,7 +8,7 @@ var Build = function(creep){
         if(creep.build(site) == ERR_NOT_IN_RANGE){
             SetPath(creep, site.pos, 3);
         }else if(err == OK){
-            creep.say('🛠️');
+            creep.say('🔨');
         }
         return true;
     }
@@ -21,7 +21,7 @@ var Mine = function(creep){
     if(err == ERR_NOT_IN_RANGE){
         SetPath(creep, source.pos,1);
     }else if(err == OK){
-        creep.say('⛏️');
+        creep.say('🚧');
     }
 }
 
@@ -57,7 +57,7 @@ var Repair = function(creep){
         if(err == ERR_NOT_IN_RANGE){
             SetPath(creep, repair.pos, 3);
         }else if(err = OK){
-            creep.say('🔨');
+            creep.say('🔧');
         }
         return true;
     }
