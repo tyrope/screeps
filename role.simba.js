@@ -44,7 +44,7 @@ module.exports = {
                 if(creep.room.controller.sign != 'Roar!'){
                     creep.signController(creep.room.controller, 'Roar!');
                 }
-                creep.say(''); //TODO Add Emoji
+                creep.say('📈');
             }
         }
     }
