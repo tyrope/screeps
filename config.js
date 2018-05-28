@@ -1,7 +1,7 @@
 // USER CONFIGURABLE.
 var DesiredCreeps = {'Cub': 1, 'Sarafina': 2, 'Simba': 1, 'Scar': 0};
 var SpawnName = 'LionsDen';
-var IdlePosition = {x: 12, y:41};
+var IdlePosition = {x: 20, y:20};
 
 /* END OF CONFIGURATION. DO NOT TOUCH BELOW THIS LINE.
  * **********************************
@@ -9,6 +9,13 @@ var IdlePosition = {x: 12, y:41};
 module.exports = {
     DesiredCreeps: DesiredCreeps,
     SpawnName: SpawnName,
-    IdleArea: new RoomPosition(IdlePosition.x, IdlePosition.y, Game.spawns[SpawnName].room.name),
+    IdleArea: function(){
+        // Don't cache this. `Game` apparently resets sometimes.
+        return new RoomPosition(
+            IdlePosition.x,
+            IdlePosition.y,
+            Game.spawns[SpawnName].room.name
+        );
+    }
 }
 
