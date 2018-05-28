@@ -9,6 +9,13 @@ var IdlePosition = {x: 4, y:45};
 module.exports = {
     DesiredCreeps: DesiredCreeps,
     SpawnName: SpawnName,
-    IdleArea: new RoomPosition(IdlePosition.x, IdlePosition.y, Game.spawns[SpawnName].room.name),
+    IdleArea: function(){
+        // Don't cache this. `Game` apparently resets sometimes.
+        return new RoomPosition(
+            IdlePosition.x,
+            IdlePosition.y,
+            Game.spawns[SpawnName].room.name
+        );
+    }
 }
 
