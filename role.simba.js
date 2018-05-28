@@ -36,11 +36,15 @@ module.exports = {
             }
             // So we've got stuffs and we're not refilling. Deposit!
             let err = creep.upgradeController(creep.room.controller);
-            if(er == ERR_NOT_IN_RANGE){
+            if(err == ERR_NOT_IN_RANGE){
                 // We're not there yet...
                 TM.SetPath(creep, creep.room.controller.pos, 3);
-            }else if(err == OK && creep.room.controller.sign != 'Roar!'){
-                creep.signController(creep.room.controller, 'Roar!');
+            }else if(err == OK){
+                // If we didn't sign yet, we should now.
+                if(creep.room.controller.sign != 'Roar!'){
+                    creep.signController(creep.room.controller, 'Roar!');
+                }
+                creep.say(''); //TODO Add Emoji
             }
         }
     }
