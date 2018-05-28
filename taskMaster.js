@@ -1,3 +1,4 @@
+var Config = require('config');
 var Pathfinding = require('pathfinding');
 
 var Build = function(creep){
@@ -14,8 +15,8 @@ var Build = function(creep){
 
 var Mine = function(creep){
     let sources = creep.room.find(FIND_SOURCES);
-    if(creep.harvest(sources[0]) == ERR_NOT_IN_RANGE){
-        SetPath(creep, sources[0].pos,1);
+    if(creep.harvest(sources[Config.Source]) == ERR_NOT_IN_RANGE){
+        SetPath(creep, sources[Config.Source].pos,1);
     }
 }
 
