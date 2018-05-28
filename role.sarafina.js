@@ -36,9 +36,9 @@ module.exports = {
                 return;
             }
 
-            if(TM.Build(creep) ){ return; }
+            if(TM.Build( creep)){ return; }
+            if(TM.Repair(creep)){ return; }
             if(TM.Supply(creep)){ return; }
-
             creep.say('💤');
             TM.SetPath(creep, Config.IdleArea, 1);
         }
