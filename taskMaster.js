@@ -1,11 +1,14 @@
 var Pathfinding = require('pathfinding');
 
 var Build = function(creep){
-    let site = creep.room.findClosestByPath(FIND_CONSTRUCTION_SITES);
+    let site = creep.pos.findClosestByPath(FIND_CONSTRUCTION_SITES);
     if(site != null){
         // We've got a thing to build!
+        let err = creep.build(site);
         if(creep.build(site) == ERR_NOT_IN_RANGE){
             SetPath(creep, site.pos, 3);
+        }else if(err == OK){
+            creep.say(''); //TODO Add emoji.
         }
         return true;
     }
@@ -13,9 +16,12 @@ var Build = function(creep){
 }
 
 var Mine = function(creep){
-    let source = creep.room.findClosestByPath(FIND_SOURCES);
-    if(creep.harvest(source) == ERR_NOT_IN_RANGE){
+    let source = creep.pos.findClosestByPath(FIND_SOURCES);
+    let err = creep.harvest(source);
+    if(err == ERR_NOT_IN_RANGE){
         SetPath(creep, source.pos,1);
+    }else if(err == OK){
+        creep.say(''); //TODO Add emoji.
     }
 }
 
@@ -40,15 +46,18 @@ var Refill = function(creep){
 }
 
 var Repair = function(creep){
-    let repair = creep.room.findClosestByPath(FIND_STRUCTURES, {
+    let repair = creep.pos.findClosestByPath(FIND_STRUCTURES, {
         filter: (structure) => {
             return structure.hits < structure.hitsMax
         }
     });
 
     if(repair != null){
-        if(creep.repair(repair) == ERR_NOT_IN_RANGE){
+        let err = creep.repair(repair);
+        if(err == ERR_NOT_IN_RANGE){
             SetPath(creep, repair.pos, 3);
+        }else if(err = OK){
+            creep.say(''); // TODO Add emoji
         }
         return true;
     }
@@ -66,15 +75,18 @@ var SetPath = function(creep, dest, range){
 }
 
 var Supply = function(creep){
-    let storage = creep.room.findClosestBypath(FIND_STRUCTURES, {
+    let storage = creep.pos.findClosestByPath(FIND_STRUCTURES, {
         filter: (structure) => {
             return structure.energy < structure.energyCapacity
         }
     });
 
     if(storage != null){
-        if(creep.transfer(storage, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE){
+        let err = creep.transfer(storage, RESOURCE_ENERGY);
+        if(err == ERR_NOT_IN_RANGE){
             SetPath(creep, storage.pos, 1);
+        }else if(err == OK){
+            creep.say(''); //TODO Add emoji.
         }
         return true;
     }
