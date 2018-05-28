@@ -1,7 +1,7 @@
 // USER CONFIGURABLE.
 var DesiredCreeps = {'Cub': 1, 'Sarafina': 2, 'Simba': 1, 'Scar': 0};
 var SpawnName = 'LionsDen';
-var IdlePosition = {x: 20, y:20};
+var IdlePosition = {x: 12, y:41};
 
 /* END OF CONFIGURATION. DO NOT TOUCH BELOW THIS LINE.
  * **********************************
