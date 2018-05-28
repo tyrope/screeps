@@ -25,7 +25,7 @@ module.exports = {
         if(creep.carry.energy < creep.carryCapacity){
             TM.Mine(creep);
         }else if(!TM.Supply(creep)){
-            creep.say('Idling...');
+            creep.say('💤');
             TM.SetPath(creep, Config.IdleArea, 1);
         }
     }
