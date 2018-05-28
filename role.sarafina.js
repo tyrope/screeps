@@ -40,7 +40,7 @@ module.exports = {
             if(TM.Build(creep) ){ return; }
             if(TM.Supply(creep)){ return; }
 
-            creep.say('😴');
+            creep.say('💤');
             TM.SetPath(creep, Config.IdleArea, 1);
         }
     }
