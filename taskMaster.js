@@ -1,12 +1,11 @@
-var Config = require('config');
 var Pathfinding = require('pathfinding');
 
 var Build = function(creep){
-    let sites = creep.room.find(FIND_CONSTRUCTION_SITES);
-    if(sites.length){
+    let site = creep.room.findClosestByPath(FIND_CONSTRUCTION_SITES);
+    if(site != null){
         // We've got a thing to build!
-        if(creep.build(sites[0]) == ERR_NOT_IN_RANGE){
-            SetPath(creep, sites[0].pos, 3);
+        if(creep.build(site) == ERR_NOT_IN_RANGE){
+            SetPath(creep, site.pos, 3);
         }
         return true;
     }
@@ -14,9 +13,9 @@ var Build = function(creep){
 }
 
 var Mine = function(creep){
-    let sources = creep.room.find(FIND_SOURCES);
-    if(creep.harvest(sources[Config.Source]) == ERR_NOT_IN_RANGE){
-        SetPath(creep, sources[Config.Source].pos,1);
+    let source = creep.room.findClosestByPath(FIND_SOURCES);
+    if(creep.harvest(source) == ERR_NOT_IN_RANGE){
+        SetPath(creep, source.pos,1);
     }
 }
 
@@ -41,15 +40,15 @@ var Refill = function(creep){
 }
 
 var Repair = function(creep){
-    let repairs = creep.room.find(FIND_STRUCTURES, {
+    let repair = creep.room.findClosestByPath(FIND_STRUCTURES, {
         filter: (structure) => {
             return structure.hits < structure.hitsMax
         }
     });
 
-    if(repairs.length){
-        if(creep.repair(repairs[0]) == ERR_NOT_IN_RANGE){
-            SetPath(creep, repairs[0].pos, 3);
+    if(repair != null){
+        if(creep.repair(repair) == ERR_NOT_IN_RANGE){
+            SetPath(creep, repair.pos, 3);
         }
         return true;
     }
@@ -67,15 +66,15 @@ var SetPath = function(creep, dest, range){
 }
 
 var Supply = function(creep){
-    let storages = creep.room.find(FIND_STRUCTURES, {
+    let storage = creep.room.findClosestBypath(FIND_STRUCTURES, {
         filter: (structure) => {
             return structure.energy < structure.energyCapacity
         }
     });
 
-    if(storages.length){
-        if(creep.transfer(storages[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE){
-            SetPath(creep, storages[0].pos, 1);
+    if(storage != null){
+        if(creep.transfer(storage, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE){
+            SetPath(creep, storage.pos, 1);
         }
         return true;
     }
