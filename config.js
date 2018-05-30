@@ -7,7 +7,7 @@ var DesiredCreeps = {'Cub': 1, 'Simba': 1, 'Sarafina': 1, 'Scar': 0};
 var SpawnName = 'LionsDen';
 
 // Where in the room that the above spawner is in should the creeps idle?
-var IdlePosition = {x: 20, y:20};
+var IdlePosition = {x: 4, y:45};
 
 // How long should the Pathfinding system hold onto data before discarding it?
 // Default: 1800 = ~30 minutes.
