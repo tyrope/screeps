@@ -1,7 +1,17 @@
 // USER CONFIGURABLE.
-var DesiredCreeps = {'Cub': 1, 'Sarafina': 2, 'Simba': 1, 'Scar': 0};
+
+// The number of creeps you want.
+var DesiredCreeps = {'Cub': 1, 'Simba': 1, 'Sarafina': 1, 'Scar': 0};
+
+// The name of the spawn
 var SpawnName = 'LionsDen';
-var IdlePosition = {x: 4, y:45};
+
+// Where in the room that the above spawner is in should the creeps idle?
+var IdlePosition = {x: 20, y:20};
+
+// How long should the Pathfinding system hold onto data before discarding it?
+// Default: 1800 = ~30 minutes.
+var PFExpiry = 1800;
 
 /* END OF CONFIGURATION. DO NOT TOUCH BELOW THIS LINE.
  * **********************************
@@ -16,6 +26,7 @@ module.exports = {
             IdlePosition.y,
             Game.spawns[SpawnName].room.name
         );
-    }
+    },
+    PathFindingExpiry: PFExpiry
 }
 

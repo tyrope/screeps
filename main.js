@@ -1,5 +1,6 @@
 var logVerbose = false;
 
+var PathFinding = require('pathfinding');
 var SpawnController = require('spawnController');
 var RoleController = require('roleController');
 
@@ -25,6 +26,10 @@ module.exports.loop = function() {
 
     // Memory cleanup.
     garbageCollect();
+    if(Game.time % 60 == 0){
+        // Check the cache every minute.
+        PathFinding.CheckCache();
+    }
 
     // Do we need to spawn a new creep?
     SpawnController.DoSpawns();
