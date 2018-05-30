@@ -10,6 +10,7 @@ module.exports = {
     Mem: {
         memory: {
             activePath: {},
+            requireFililng: true,
             role: 'Cub'
         }
     },
@@ -21,10 +22,21 @@ module.exports = {
             return;
         }
 
-        // We full?
-        if(creep.carry.energy < creep.carryCapacity){
+        // Are we in the process of refilling?
+        if(creep.memory.requireFilling){
+            // We full yet?
+            if(creep.carry.energy == creep.carryCapacity){
+                // Job done!
+                creep.memory.requireFilling = false;
+                return;
+            }
             TM.Mine(creep);
         }else{
+            if(creep.carry.energy == 0){
+                // Actually... we're empty.
+                creep.memory.requireFilling = true;
+                return;
+            }
             if(TM.Supply(creep)){ return; }
             if(TM.Repair(creep)){ return; }
             creep.say('💤');

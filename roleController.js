@@ -2,8 +2,8 @@ var logVerbose = false;
 
 var Roles = {
     'Cub': require('role.cub'),
-    'Sarafina': require('role.sarafina'),
     'Simba': require('role.simba'),
+    'Sarafina': require('role.sarafina'),
     'Scar': require('role.scar')
 }
 
