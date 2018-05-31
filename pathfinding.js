@@ -112,7 +112,7 @@ var GetCostMatrix = function(roomName){
 
     // Save, set expiry and exit.
     Memory.CostMatrix[roomName] = ret;
-    Memory.Expiry.Rooms[roomName] = Game.tick + Config.PathFindingExpiry;
+    Memory.Expiry.Rooms[roomName] = Game.time + Config.PathFindingExpiry;
     return ret;
 }
 
