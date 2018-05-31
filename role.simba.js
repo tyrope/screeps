@@ -41,11 +41,18 @@ module.exports = {
                 // We're not there yet...
                 TM.SetPath(creep, creep.room.controller.pos, 3);
             }else if(err == OK){
+/* FIXME: Room Signing.
                 // If we didn't sign yet, we should now.
-                if(creep.room.controller.sign != 'Roar!'){
-                    console.log('ROAR! Room '+creep.room.name+' has been signed by '+creep.name+'.');
-                    creep.signController(creep.room.controller, 'Roar!');
+                if(creep.room.controller.sign.text != 'Roar!'){
+                    if(creep.signController(creep.room.controller, 'Roar!') != OK){
+                        console.log(creep.name+' is moving closer to the controller so he can sign it.');
+                        TM.SetPath(creep, creep.room.controller.pos, 1);
+                    }else{
+                        console.log('Sign: '+creep.room.controller.sign.text);
+                        console.log('ROAR! Room '+creep.room.name+' has been signed by '+creep.name+'.');
+                    }
                 }
+*/
                 creep.say('📈');
             }
         }
