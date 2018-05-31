@@ -35,9 +35,7 @@ var checkCache = function(){
         }
     }
 
-    if(ExpiredRooms.length > 0){
-        console.log('Pathfinding::checkCache::'+ExpiredRooms.length+' rooms have expired: '+ExpiredRooms.toString());
-    }
+    let pathsExpired = 0;
 
     for(let p in Memory.Expiry.Paths){
         let rStart  = p.split('-')[0].split('.')[0];
@@ -61,12 +59,17 @@ var checkCache = function(){
                 console.log('Pathfinding::checkCache::'+p+' has expired.');
             }
 
+            pathsExpired++;
+
             // Remove the path.
             delete Memory.Paths[p];
             delete Memory.Expiry.Paths[p];
         }
     }
 
+    if(ExpiredRooms.length > 0 || pathsExpired > 0){
+        console.log('Pathfinding::checkCache::'+ExpiredRooms.length+' room(s) and '+pathsExpired+' path(s) have expired.');
+    }
     if(logVerbose){ console.log('Pathfinding::checkCache::end'); }
 }
 
