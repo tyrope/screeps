@@ -44,6 +44,7 @@ module.exports = {
             }else if(err == OK){
                 // If we didn't sign yet, we should now.
                 if(creep.room.controller.sign != 'Roar!'){
+                    console.log('ROAR! Room '+creep.room.name+' has been signed by '+creep.name+'.');
                     creep.signController(creep.room.controller, 'Roar!');
                 }
                 creep.say('📈');
