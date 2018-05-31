@@ -1,3 +1,5 @@
+var logVerbose = false;
+
 var Pathfinding = require('pathfinding');
 
 var Build = function(creep){
@@ -27,16 +29,27 @@ var Mine = function(creep){
 
 var Move = function(creep){
     let loc = creep.memory.activePath[0];
-    let mv = creep.move(creep.pos.getDirectionTo(loc.x,loc.y));
-    if(mv == OK){
-        // TODO: The return code might call itself 'OK',
-        // but we might not have actually moved due to a creep blocking us.
-
-        // This move was completed, delete it.
+    if(loc.x == creep.pos.x && loc.y == creep.pos.y){
+        // We're here, so drop this part of the path.
         creep.memory.activePath = _.drop(creep.memory.activePath);
-    }else if(mv != ERR_TIRED){
-        console.log(creep.name+'::Trying to move to but cannot. error code: '+mv);
+
+        // Grab the next bit of path, if available
+        if(creep.memory.activePath.length){
+            loc = creep.memory.activePath[0];
+        }else{
+            // No more moving.
+            return false;
+        }
     }
+    if(logVerbose){
+        console.log('TaskMaster::Move::'+creep.name+' from ['+creep.pos.x+','+creep.pos.y+'] to ['+loc.x+','+loc.y+'].');
+    }
+    let mv = creep.move(creep.pos.getDirectionTo(loc.x, loc.y));
+    if(mv != OK && mv != ERR_TIRED){
+        console.log(creep.name+'::Trying to move to but cannot. error code: '+mv);
+        return false;
+    }
+    return true;
 }
 
 var Refill = function(creep){
