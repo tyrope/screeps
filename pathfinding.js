@@ -121,12 +121,14 @@ var findPath = function(from, to){
         console.log(
             'Pathfinding::Start -- '+
             'From: '+JSON.stringify(from)+' -- '+
-            'To: '+JSON.stringify(to)
+            'To: '+JSON.stringify(to)+' -- '+
+            'Range: '+to.range
         );
     }
     // Serialize the path's name.
+    // Example: sim.1.1-sim.2.2-1
     let pathName = from.roomName+'.'+from.x+'.'+from.y;
-    pathName +=  '-'+to.pos.roomName+'.'+  to.pos.x+'.'+  to.pos.y;
+    pathName +=  '-'+to.pos.roomName+'.'+to.pos.x+'.'+to.pos.y+'-'+to.range;
 
     if(logVerbose){
         console.log('Pathfinding::Serialized path name: '+pathName);
@@ -140,8 +142,6 @@ var findPath = function(from, to){
 
     // Do we have a path between these points?
     if(pathName in Memory.Paths){
-        // TODO: If we have a path with a longer range than us cached,
-        //       then we won't make it there!
         if(logVerbose){
             console.log('Pathfinding::Returning cached path.');
         }
