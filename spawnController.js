@@ -62,7 +62,15 @@ var DoCreepSpawn = function(role){
         Game.spawns[Config.SpawnName].spawnCreep(
             RoleController.Roles[role].Body,
             role + Game.time,
-            RoleController.Roles[role].Mem
+            _.merge(
+                // All roles need these.
+                memory: {
+                    activePath: {},
+                    CAS: {}
+                },
+                // All roles also have specific memories, like their name.
+                RoleController.Roles[role].Mem
+            )
         );
     }else if(logVerbose){
         console.log('SpawnController::DoCreepSpawn::Cannot spawn: ' + spawnCode);

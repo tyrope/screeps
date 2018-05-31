@@ -6,7 +6,6 @@ module.exports = {
 
     Mem: {
         memory: {
-            activePath: {},
             requireFilling: true,
             role: 'Simba'
         }

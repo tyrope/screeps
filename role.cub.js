@@ -9,7 +9,6 @@ module.exports = {
 
     Mem: {
         memory: {
-            activePath: {},
             requireFilling: true,
             role: 'Cub'
         }
