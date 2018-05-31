@@ -1,4 +1,5 @@
 var logVerbose = false;
+var memDump = false;
 
 var PathFinding = require('pathfinding');
 var SpawnController = require('spawnController');
@@ -20,7 +21,12 @@ var garbageCollect = function(){
 }
 
 module.exports.loop = function() {
-    if(logVerbose){
+    if(memDump){
+        console.log(
+            'main::start::dumping memory...\n'+
+            RawMemory.get()
+        );
+    }else if(logVerbose){
         console.log('main::start');
     }
 
