@@ -15,8 +15,10 @@ module.exports = {
     Tick: function(creep){
         // We moving?
         if(creep.memory.activePath.length){
-            TM.Move(creep);
-            return;
+            if(TM.Move(creep)){
+                // Only return if we're actually moving.
+                return;
+            }
         }
 
         // Try to be recycled.
