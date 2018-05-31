@@ -51,12 +51,10 @@ var DoCreepSpawn = function(role){
     if(logVerbose){
         console.log('SpawnController::DoCreepSpawn::Trying to spawn a '+role);
     }
-
     let spawnCode = Game.spawns[Config.SpawnName].spawnCreep(
         RoleController.Roles[role].Body,
         'dryRun' + Game.time,
         {dryRun:true});
-
     if( spawnCode === 0){
         console.log('SpawnController::DoCreepSpawn::Spawning a '+role+'.');
         Game.spawns[Config.SpawnName].spawnCreep(
@@ -64,11 +62,14 @@ var DoCreepSpawn = function(role){
             role + Game.time,
             _.merge(
                 // All roles need these.
-                memory: {
+                {memory: {
                     activePath: {},
-                    CAS: {}
-                },
-                // All roles also have specific memories, like their name.
+                    CAS: {
+                        'location': {},
+                        'duration': 0
+                    }
+                }},
+                // All roles also have specific memories, like their role name.
                 RoleController.Roles[role].Mem
             )
         );

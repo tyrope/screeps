@@ -54,6 +54,9 @@ var Move = function(creep){
         // We're here, so drop this part of the path.
         creep.memory.activePath = _.drop(creep.memory.activePath);
 
+        // Reset the CAS for this creep.
+        creep.memory.CAS = {'location': {}, 'duration': 0};
+
         // Grab the next bit of path, if available
         if(creep.memory.activePath.length){
             loc = creep.memory.activePath[0];
@@ -61,6 +64,12 @@ var Move = function(creep){
             // No more moving.
             return false;
         }
+    }else{
+        // If we reached this part of the code, there's one of 2 scenarios.
+        // 1) We've just started a new path.
+        // 2) On the last tick, our move was blocked.
+        // Either way, we should invoke the CAS.
+        Pathfinding.CAS(creep, loc);
     }
 
     let mv = creep.move(creep.pos.getDirectionTo(loc.x, loc.y));

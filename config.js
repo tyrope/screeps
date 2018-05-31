@@ -13,10 +13,17 @@ var IdlePosition = {x: 20, y:20};
 // Default: 1800 = ~30 minutes.
 var PFExpiry = 1800;
 
+// The Collision Avoidance System waits an X amount of ticks before activating.
+// Lower values make it more trigger happy (and CPU heavy)
+// Higher values will keep your stuck creeps in place for longer.
+// Default: 3 ticks.
+var CASDelay = 3;
+
 /* END OF CONFIGURATION. DO NOT TOUCH BELOW THIS LINE.
  * **********************************
  */
 module.exports = {
+    CASDelay, CASDelay,
     DesiredCreeps: DesiredCreeps,
     SpawnName: SpawnName,
     IdleArea: function(){
