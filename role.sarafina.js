@@ -7,7 +7,6 @@ module.exports = {
 
     Mem: {
         memory: {
-            activePath: {},
             requireFilling: true,
             role: 'Sarafina'
         }
@@ -41,8 +40,7 @@ module.exports = {
             if(TM.Build( creep)){ return; }
             if(TM.Repair(creep)){ return; }
             if(TM.Supply(creep)){ return; }
-            creep.say('💤');
-            TM.SetPath(creep, Config.IdleArea, 1);
+            TM.Idle(creep);
         }
     }
 }

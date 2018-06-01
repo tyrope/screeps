@@ -1,7 +1,7 @@
 // USER CONFIGURABLE.
 
 // The number of creeps you want.
-var DesiredCreeps = {'Cub': 1, 'Simba': 1, 'Sarafina': 1, 'Scar': 0};
+var DesiredCreeps = {'Cub': 2, 'Simba': 2, 'Sarafina': 1, 'Scar': 0};
 
 // The name of the spawn
 var SpawnName = 'LionsDen';
@@ -13,10 +13,17 @@ var IdlePosition = {x: 4, y:45};
 // Default: 1800 = ~30 minutes.
 var PFExpiry = 1800;
 
+// The Collision Avoidance System waits an X amount of ticks before activating.
+// Lower values make it more trigger happy (and CPU heavy)
+// Higher values will keep your stuck creeps in place for longer.
+// Default: 3 ticks.
+var CASDelay = 3;
+
 /* END OF CONFIGURATION. DO NOT TOUCH BELOW THIS LINE.
  * **********************************
  */
 module.exports = {
+    CASDelay, CASDelay,
     DesiredCreeps: DesiredCreeps,
     SpawnName: SpawnName,
     IdleArea: function(){

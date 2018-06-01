@@ -7,7 +7,6 @@ module.exports = {
 
     Mem: {
         memory: {
-            activePath: {},
             role: 'Scar'
         }
     },

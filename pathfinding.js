@@ -2,6 +2,194 @@ var logVerbose = false;
 
 var Config = require('config');
 
+var CAS = function(creep, position){
+    if(logVerbose){
+        console.log(
+            'CAS::start for '+creep.name+', to '+
+            position.roomName+'['+position.x+','+position.y+']'
+        );
+    }
+    if(creep.memory.CAS.location == {} || (
+        // Apparently using == on 2 RoomLocations that point to the same place
+        // can still return false...
+        creep.memory.CAS.location.x == creep.pos.x &&
+        creep.memory.CAS.location.y == creep.pos.y &&
+        creep.memory.CAS.location.roomName == creep.pos.roomName
+    )){
+        // This is the first time we've invoked CAS in this location.
+        // Just initialize, don't actually do anything yet.
+        creep.memory.CAS['location'] = creep.pos;
+        creep.memory.CAS['duration'] = 1;
+        return;
+    }
+
+    // How long have we been stuck here?
+    creep.memory.CAS.duration++;
+    if(creep.memory.CAS.duration >= Config.CASDelay){
+        // WE'RE DECLARING A COLLISION!
+        creep.say('CAS alert!');
+        switch(creep.pos.getDirectionTo(
+            new RoomPosition(
+                position.x,
+                position.y,
+                position.roomName
+            )
+        )){
+            case TOP_LEFT:
+                // Try TOP and LEFT
+                if(canMove(new RoomPosition(creep.pos.x, creep.pos.y-1, creep.pos.roomName))){
+                    creep.move(TOP);
+                }else if(canMove(new RoomPosition(creep.pos.x-1, creep.pos.y, creep.pos.roomName))){
+                    creep.move(LEFT);
+                }
+                break;
+            case TOP:
+                // Try TOP_RIGHT and TOP_LEFT
+                if(canMove(new RoomPosition(creep.pos.x+1, creep.pos.y-1, creep.pos.roomName))){
+                    creep.move(TOP_RIGHT);
+                }else if(canMove(new RoomPosition(creep.pos.x-1, creep.pos.y-1, creep.pos.roomName))){
+                    creep.move(TOP_LEFT);
+                }
+                break;
+            case TOP_RIGHT:
+                // Try TOP and RIGHT
+                if(canMove(new RoomPosition(creep.pos.x, creep.pos.y-1, creep.pos.roomName))){
+                    creep.move(TOP);
+                }else if(canMove(new RoomPosition(creep.pos.x+1, creep.pos.y, creep.pos.roomName))){
+                    creep.move(RIGHT);
+                }
+                break;
+            case LEFT:
+                // Try TOP_LEFT and BOTTOM_LEFT
+                if(canMove(new RoomPosition(creep.pos.x-1, creep.pos.y-1, creep.pos.roomName))){
+                    creep.move(TOP_LEFT);
+                }else if(canMove(new RoomPosition(creep.pos.x-1, creep.pos.y+1, creep.pos.roomName))){
+                    creep.move(BOTTOM_LEFT);
+                }
+                break;
+            case RIGHT:
+                // Try TOP_RIGHT and BOTTOM_RIGHT
+                if(canMove(new RoomPosition(creep.pos.x+1, creep.pos.y-1, creep.pos.roomName))){
+                    creep.move(TOP_RIGHT);
+                }else if(canMove(new RoomPosition(creep.pos.x+1, creep.pos.y-1, creep.pos.roomName))){
+                    creep.move(BOTTOM_RIGHT);
+                }
+                break;
+            case BOTTOM_LEFT:
+                // Try BOTTOM and LEFT
+                if(canMove(new RoomPosition(creep.pos.x, creep.pos.y+1, creep.pos.roomName))){
+                    creep.move(BOTTOM);
+                }else if(canMove(new RoomPosition(creep.pos.x-1, creep.pos.y, creep.pos.roomName))){
+                    creep.move(LEFT);
+                }
+                break;
+            case BOTTOM:
+                // Try BOTTOM_RIGHT and BOTTOM_LEFT
+                if(canMove(new RoomPosition(creep.pos.x+1, creep.pos.y+1, creep.pos.roomName))){
+                    creep.move(BOTTOM_RIGHT);
+                }else if(canMove(new RoomPosition(creep.pos.x-1, creep.pos.y+1, creep.pos.roomName))){
+                    creep.move(BOTTOM_LEFT);
+                }
+                break;
+            case BOTTOM_RIGHT:
+                // Try BOTTOM and RIGHT
+                if(canMove(new RoomPosition(creep.pos.x, creep.pos.y+1, creep.pos.roomName))){
+                    creep.move(BOTTOM);
+                }else if(canMove(new RoomPosition(creep.pos.x-1, creep.pos.y, creep.pos.roomName))){
+                    creep.move(LEFT);
+                }
+                break;
+            default:
+                console.log(
+                    'CAS::['+
+                    creep.pos.x+','+
+                    creep.pos.y+'] to ['+
+                    position.x+','+
+                    position.y+'] is an invalid direction! ('+
+                    creep.pos.getDirectionTo(position)+')'
+                );
+                break;
+            // End switch
+        }
+        // We've strayed from our path, reconsider the movement next tick.
+        creep.memory.activePath = {};
+        creep.memory.CAS.location = {};
+        creep.memory.CAS.duration = 0;
+        return true;
+    }else{
+        if(logVerbose){
+            console.log(
+                'CAS::Arming system for '+
+                creep.name+', tick ('+
+                creep.memory.CAS.duration+'/'+
+                Config.CASDelay+').'
+            );
+        }
+    }
+}
+
+var canMove = function(position){
+    let look = position.look();
+    let canMove = true;
+    if(logVerbose){
+        console.log(
+            'CAS::canMove::start -- '+
+            position.roomName+'['+position.x+','+position.y+']'
+        );
+    }
+    look.forEach(
+        function(lookObject){
+            if(lookObject.type == 'creep'){
+                if(logVerbose){ console.log('CAS::canMove -- Occupied.'); }
+                canMove = false;
+            }
+            if(lookObject.type == 'terrain' && lookObject.terrain == 'wall'){
+                if(logVerbose){ console.log('CAS::canMove -- Natural wall'); }
+                canMove = false;
+            }
+            if(lookObject.type == 'structure'){
+                let typ = lookObject.structure.structureType;
+                if(logVerbose){
+                    console.log('CAS::canMove -- Structure: '+typ+'.');
+                }
+                if(typ == STRUCTURE_SPAWN ||
+                    typ == STRUCTURE_EXTENSION ||
+                    typ == STRUCTURE_WALL ||
+                    (
+                        // Ramparts cannot be moved through if they're owned
+                        // by others and not set to public.
+                        typ == STRUCTURE_RAMPART &&
+                        (!lookObject.structure.my && !lookObject.structure.isPublic)
+                    ) ||
+                    typ == STRUCTURE_KEEPER_LAIR ||
+                    // Portals don't block us, but it's a hassle to get back.
+                    typ == STRUCTURE_PORTAL ||
+                    typ == STRUCTURE_CONTROLLER ||
+                    typ == STRUCTURE_LINK ||
+                    typ == STRUCTURE_STORAGE ||
+                    typ == STRUCTURE_TOWER ||
+                    typ == STRUCTURE_OBSERVER ||
+                    typ == STRUCTURE_POWER_BANK ||
+                    typ == STRUCTURE_POWER_SPAWN ||
+                    typ == STRUCTURE_EXTRACTOR ||
+                    typ == STRUCTURE_LAB ||
+                    typ == STRUCTURE_TERMINAL ||
+                    typ == STRUCTURE_NUKER
+                ){
+                    if(logVerbose){
+                        console.log(
+                            'CAS::canMove -- Structure cannot be moved through.'
+                        );
+                    }
+                    canMove = false;
+                }
+            }
+        }
+    );
+    if(logVerbose){ console.log('CAS::canMove::end -- '+canMove); }
+    return canMove;
+}
+
 var checkCache = function(){
     if(logVerbose){ console.log('Pathfinding::checkCache::start'); }
 
@@ -35,9 +223,7 @@ var checkCache = function(){
         }
     }
 
-    if(ExpiredRooms.length > 0){
-        console.log('Pathfinding::checkCache::'+ExpiredRooms.length+' rooms have expired: '+ExpiredRooms.toString());
-    }
+    let pathsExpired = 0;
 
     for(let p in Memory.Expiry.Paths){
         let rStart  = p.split('-')[0].split('.')[0];
@@ -61,12 +247,17 @@ var checkCache = function(){
                 console.log('Pathfinding::checkCache::'+p+' has expired.');
             }
 
+            pathsExpired++;
+
             // Remove the path.
             delete Memory.Paths[p];
             delete Memory.Expiry.Paths[p];
         }
     }
 
+    if(ExpiredRooms.length > 0 || pathsExpired > 0){
+        console.log('Pathfinding::checkCache::'+ExpiredRooms.length+' room(s) and '+pathsExpired+' path(s) have expired.');
+    }
     if(logVerbose){ console.log('Pathfinding::checkCache::end'); }
 }
 
@@ -112,7 +303,7 @@ var GetCostMatrix = function(roomName){
 
     // Save, set expiry and exit.
     Memory.CostMatrix[roomName] = ret;
-    Memory.Expiry.Rooms[roomName] = Game.tick + Config.PathFindingExpiry;
+    Memory.Expiry.Rooms[roomName] = Game.time + Config.PathFindingExpiry;
     return ret;
 }
 
@@ -176,6 +367,7 @@ var findPath = function(from, to){
 }
 
 module.exports = {
+    CAS: CAS,
     CheckCache: checkCache,
     findPath: findPath
 }
