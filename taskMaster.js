@@ -69,7 +69,10 @@ var Move = function(creep){
         // 1) We've just started a new path.
         // 2) On the last tick, our move was blocked.
         // Either way, we should invoke the CAS.
-        Pathfinding.CAS(creep, loc);
+        if(Pathfinding.CAS(creep, loc)){
+            // CAS triggered, tell the creep we're moving, but don't continue our path!
+            return true;
+        }
     }
 
     let mv = creep.move(creep.pos.getDirectionTo(loc.x, loc.y));
