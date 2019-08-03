@@ -23,6 +23,8 @@ var CAS = function(creep, position){
         return;
     }
 
+    // TODO: Are we unable to move to our path's end? If so, probably want to go somewhere else.
+
     // How long have we been stuck here?
     creep.memory.CAS.duration++;
     if(creep.memory.CAS.duration >= Config.CASDelay){
