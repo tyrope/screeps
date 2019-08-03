@@ -2,7 +2,7 @@ var Pathfinding = require('pathfinding');
 var TM = require('taskMaster');
 
 module.exports = {
-    Body: [WORK, CARRY, MOVE],
+    Body: [WORK, CARRY, CARRY, MOVE, MOVE],
 
     Mem: {
         memory: {
