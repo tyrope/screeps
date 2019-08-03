@@ -1,13 +1,13 @@
 // USER CONFIGURABLE.
 
 // The number of creeps you want.
-var DesiredCreeps = {'Cub': 2, 'Simba': 2, 'Sarafina': 1, 'Scar': 0};
+var DesiredCreeps = {'Cub': 1, 'Simba': 1, 'Sarafina': 1, 'Scar': 0};
 
 // The name of the spawn
-var SpawnName = 'LionsDen';
+var SpawnName = 'Spawn1';
 
 // Where in the room that the above spawner is in should the creeps idle?
-var IdlePosition = {x: 4, y:45};
+var IdlePosition = {x: 4, y:15};
 
 // How long should the Pathfinding system hold onto data before discarding it?
 // Default: 1800 = ~30 minutes.
