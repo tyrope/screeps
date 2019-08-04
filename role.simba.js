@@ -50,7 +50,6 @@ module.exports = {
                         console.log(creep.name+' is moving closer to the controller so he can sign it.');
                         TM.SetPath(creep, creep.room.controller.pos, 1);
                     } else {
-                        console.log('Sign: '+creep.room.controller.sign.text);
                         console.log('ROAR! Room '+creep.room.name+' has been signed by '+creep.name+'.');
                     }
                 }
