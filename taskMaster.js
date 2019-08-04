@@ -34,7 +34,7 @@ var Idle = function(creep){
 
 var Mine = function(creep){
     if(logVerbose){
-        console.log('TaskMaster::Idle::'+creep);
+        console.log('TaskMaster::Mine::'+creep);
     }
     let source = creep.pos.findClosestByPath(FIND_SOURCES);
     let err = creep.harvest(source);
