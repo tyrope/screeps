@@ -1,7 +1,7 @@
 // USER CONFIGURABLE.
 
 // The number of creeps you want.
-var DesiredCreeps = {'Cub': 1, 'Simba': 1, 'Sarafina': 1, 'Scar': 0};
+var DesiredCreeps = {'Cub': 2, 'Simba': 5, 'Sarafina': 3, 'Scar': 0};
 
 // The name of the spawn
 var SpawnName = 'Spawn1';
