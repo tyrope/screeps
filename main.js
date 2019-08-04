@@ -32,8 +32,8 @@ module.exports.loop = function() {
 
     // Memory cleanup.
     garbageCollect();
-    if(Game.time % 60 == 0){
-        // Check the cache every minute.
+    if(Game.time % 600 == 0){
+        // Check the cache every 10 minutes.
         PathFinding.CheckCache();
     }
 
