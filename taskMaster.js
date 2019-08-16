@@ -50,7 +50,7 @@ var Move = function(creep){
             // No more moving.
             return false;
         }
-    }else{
+    }else if(creep.fatigue > 0){
         // If we reached this part of the code, there's one of 2 scenarios.
         // 1) We've just started a new path.
         // 2) On the last tick, our move was blocked.
