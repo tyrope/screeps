@@ -1,35 +1,17 @@
-var logVerbose = false;
-var memDump = false;
-
 var PathFinding = require('pathfinding');
 var SpawnController = require('spawnController');
 var RoleController = require('roleController');
 
 var garbageCollect = function(){
-    if(logVerbose){
-        console.log('main::garbageCollect::start');
-    }
     for(let mem in Memory.creeps){
         if(!Game.creeps[mem]){
             delete Memory.creeps[mem];
             console.log('main::garbageCollect::deleted ' + mem);
         }
     }
-    if(logVerbose){
-        console.log('main::garbageCollect::end');
-    }
 }
 
 module.exports.loop = function() {
-    if(memDump){
-        console.log(
-            'main::start::dumping memory...\n'+
-            RawMemory.get()
-        );
-    }else if(logVerbose){
-        console.log('main::start');
-    }
-
     // Memory cleanup.
     garbageCollect();
     if(Game.time % 600 == 0){
@@ -44,9 +26,5 @@ module.exports.loop = function() {
 
     // Tick active creeps.
     RoleController.Tick();
-
-    if(logVerbose){
-        console.log('main::end');
-    }
 }
 

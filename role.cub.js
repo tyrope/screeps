@@ -1,5 +1,3 @@
-var logVerbose = false;
-
 var Config = require('config');
 var Pathfinding = require('pathfinding');
 var TM = require('taskMaster');

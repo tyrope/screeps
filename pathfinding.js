@@ -1,14 +1,6 @@
-var logVerbose = false;
-
 var Config = require('config');
 
 var CAS = function(creep, position){
-    if(logVerbose){
-        console.log(
-            'CAS::start for '+creep.name+', to '+
-            position.roomName+'['+position.x+','+position.y+']'
-        );
-    }
     if(creep.memory.CAS.location == {} || (
         // Apparently using == on 2 RoomLocations that point to the same place
         // can still return false...
@@ -118,42 +110,22 @@ var CAS = function(creep, position){
         creep.memory.CAS.location = {};
         creep.memory.CAS.duration = 0;
         return true;
-    }else{
-        if(logVerbose){
-            console.log(
-                'CAS::Arming system for '+
-                creep.name+', tick ('+
-                creep.memory.CAS.duration+'/'+
-                Config.CASDelay+').'
-            );
-        }
     }
 }
 
 var canMove = function(position){
     let look = position.look();
     let canMove = true;
-    if(logVerbose){
-        console.log(
-            'CAS::canMove::start -- '+
-            position.roomName+'['+position.x+','+position.y+']'
-        );
-    }
     look.forEach(
         function(lookObject){
             if(lookObject.type == 'creep'){
-                if(logVerbose){ console.log('CAS::canMove -- Occupied.'); }
                 canMove = false;
             }
             if(lookObject.type == 'terrain' && lookObject.terrain == 'wall'){
-                if(logVerbose){ console.log('CAS::canMove -- Natural wall'); }
                 canMove = false;
             }
             if(lookObject.type == 'structure'){
                 let typ = lookObject.structure.structureType;
-                if(logVerbose){
-                    console.log('CAS::canMove -- Structure: '+typ+'.');
-                }
                 if(typ == STRUCTURE_SPAWN ||
                     typ == STRUCTURE_EXTENSION ||
                     typ == STRUCTURE_WALL ||
@@ -178,30 +150,21 @@ var canMove = function(position){
                     typ == STRUCTURE_TERMINAL ||
                     typ == STRUCTURE_NUKER
                 ){
-                    if(logVerbose){
-                        console.log(
-                            'CAS::canMove -- Structure cannot be moved through.'
-                        );
-                    }
                     canMove = false;
                 }
             }
         }
     );
-    if(logVerbose){ console.log('CAS::canMove::end -- '+canMove); }
     return canMove;
 }
 
 var checkCache = function(){
-    if(logVerbose){ console.log('Pathfinding::checkCache::start'); }
-
     if('Expiry' in Memory == false){
         // We've not done any pathfinding yet? Set up the memory.
         Memory['Expiry'] = {
             'Rooms': {},
             'Paths': {}
         };
-        if(logVerbose){ console.log('Pathfinding::checkCache::no memory -- end'); }
         return;
     }
 
@@ -213,9 +176,6 @@ var checkCache = function(){
 
     for(let r in Memory.Expiry.Rooms){
         if(Memory.Expiry.Rooms[r] < Game.time){
-            if(logVerbose){
-                console.log('Pathfinding::checkCache::Room '+r+'\'s CostMatrix has expired.');
-            }
             // Add to our list of rooms to expire all paths for.
             ExpiredRooms.push(r);
 
@@ -235,9 +195,6 @@ var checkCache = function(){
         for(let i in ExpiredRooms){
             if( ExpiredRooms[i] == rStart || ExpiredRooms[i] == rEnd){
                 // One of our rooms expired, we need to expire as well.
-                if(logVerbose){
-                    console.log('Pathfinding::checkCache::'+p+'\'s room has expired.');
-                }
                 rExpire = true;
                 break;
             }
@@ -245,10 +202,6 @@ var checkCache = function(){
 
         // If either our room or we ourselves are expired...
         if(rExpire || Memory.Expiry.Paths[p] < Game.time){
-            if(logVerbose && !rExpire){
-                console.log('Pathfinding::checkCache::'+p+' has expired.');
-            }
-
             pathsExpired++;
 
             // Remove the path.
@@ -260,7 +213,6 @@ var checkCache = function(){
     if(ExpiredRooms.length > 0 || pathsExpired > 0){
         console.log('Pathfinding::checkCache::'+ExpiredRooms.length+' room(s) and '+pathsExpired+' path(s) have expired.');
     }
-    if(logVerbose){ console.log('Pathfinding::checkCache::end'); }
 }
 
 var GetCostMatrix = function(roomName){
@@ -271,10 +223,6 @@ var GetCostMatrix = function(roomName){
 
     // Use cached if available.
     if(roomName in Memory.CostMatrix){
-        if(logVerbose){
-            console.log('Pathfinding::GetCostMatrix::'+
-            'Returning cached room '+roomName);
-        }
         return Memory.CostMatrix.roomName;
     }
 
@@ -283,10 +231,6 @@ var GetCostMatrix = function(roomName){
     if(!room){
         console.log('Pathfinding:GetCostMatrix::Invalid room! '+roomName);
         return false;
-    }
-
-    if(logVerbose){
-        console.log('Pathfinding::GetCostMatrix::Calculating new Matrix.');
     }
     let ret = new PathFinder.CostMatrix;
 
@@ -310,22 +254,10 @@ var GetCostMatrix = function(roomName){
 }
 
 var findPath = function(from, to){
-    if(logVerbose){
-        console.log(
-            'Pathfinding::Start -- '+
-            'From: '+JSON.stringify(from)+' -- '+
-            'To: '+JSON.stringify(to)+' -- '+
-            'Range: '+to.range
-        );
-    }
     // Serialize the path's name.
     // Example: sim.1.1-sim.2.2-1
     let pathName = from.roomName+'.'+from.x+'.'+from.y;
     pathName +=  '-'+to.pos.roomName+'.'+to.pos.x+'.'+to.pos.y+'-'+to.range;
-
-    if(logVerbose){
-        console.log('Pathfinding::Serialized path name: '+pathName);
-    }
 
     // At first, there's no such thing as /Paths in Memory.
     if('Paths' in Memory == false){
@@ -335,16 +267,10 @@ var findPath = function(from, to){
 
     // Do we have a path between these points?
     if(pathName in Memory.Paths){
-        if(logVerbose){
-            console.log('Pathfinding::Returning cached path.');
-        }
         // Return the cached path.
         return Memory.Paths[pathName];
     }
 
-    if(logVerbose){
-            console.log('Pathfinding::Calculating new path.');
-    }
     // Create a new path.
     let calculatedPath = PathFinder.search(
         from,
@@ -361,9 +287,6 @@ var findPath = function(from, to){
     Memory.Paths[pathName] = calculatedPath.path;
     Memory.Expiry.Paths[pathName] = Game.time + Config.PathFindingExpiry;
 
-    if(logVerbose){
-        console.log('Pathfinding::End');
-    }
     // Return the new path.
     return Memory.Paths[pathName];
 }
