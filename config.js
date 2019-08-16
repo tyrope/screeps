@@ -17,7 +17,7 @@ var PFExpiry = 1800;
 // Lower values make it more trigger happy (and CPU heavy)
 // Higher values will keep your stuck creeps in place for longer.
 // Default: 3 ticks.
-var CASDelay = 3;
+var CASDelay = 5;
 
 /* END OF CONFIGURATION. DO NOT TOUCH BELOW THIS LINE.
  * **********************************
