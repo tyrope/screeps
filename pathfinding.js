@@ -242,7 +242,7 @@ var GetCostMatrix = function(roomName){
             ret.set(s.pos.x, s.pos.y, 1);
         } else {
             // You shall not pass.
-            ret.set(s.pos.x, s.pos.y, 0);
+            ret.set(s.pos.x, s.pos.y, 0xff);
         }
     });
 
