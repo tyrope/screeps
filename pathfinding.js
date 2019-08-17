@@ -240,9 +240,10 @@ var GetCostMatrix = function(roomName){
         // Roads cost half as much as plains.
         if(typ == STRUCTURE_ROAD){
             ret.set(s.pos.x, s.pos.y, 1);
-        } else {
+        } else if(s.structureType !== STRUCTURE_CONTAINER &&
+            (s.structureType !== STRUCTURE_RAMPART || !s.my)){
             // You shall not pass.
-            ret.set(s.pos.x, s.pos.y, 0xff);
+            ret.set(s.pos.x, s.pos.y, 256);
         }
     });
 
